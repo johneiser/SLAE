@@ -6,8 +6,7 @@ order: 5
 
 [&lt;&lt; Go Back]({{ site.baseurl }})
 
-# Assignment 5
-### Dissect Sample Shellcode
+{% include post_header.md %}
 {% include preamble.md %}
 
 This is my post for Assignment 5
