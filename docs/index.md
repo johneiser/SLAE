@@ -1,8 +1,3 @@
----
-layout: default
-title: SLAE Challenge
----
-
 - *text*
 
 {% for post in site.posts %}
