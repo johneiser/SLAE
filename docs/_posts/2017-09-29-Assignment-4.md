@@ -8,6 +8,7 @@ order: 4
 
 # Assignment 4
 ### Create a Custom Encoder
+{% include preamble.md %}
 
 This is my post for Assignment 4
 
