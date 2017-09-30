@@ -8,6 +8,7 @@ order: 7
 
 # Assignment 7
 ### Create a Custom Crypter
+{% include preamble.md %}
 
 This is my post for Assignment 7
 
