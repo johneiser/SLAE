@@ -8,7 +8,7 @@ order: 1
 
 # {{ page.title }}
 ### {{ page.description }}
-======
+------
 ###### {{ page.date }}
 
 {% include preamble.md %}
