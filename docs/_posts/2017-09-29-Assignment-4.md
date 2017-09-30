@@ -6,8 +6,7 @@ order: 4
 
 [&lt;&lt; Go Back]({{ site.baseurl }})
 
-# Assignment 4
-### Create a Custom Encoder
+{% include post_header.md %}
 {% include preamble.md %}
 
 This is my post for Assignment 4
