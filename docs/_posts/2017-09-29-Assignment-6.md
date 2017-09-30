@@ -8,6 +8,7 @@ order: 6
 
 # Assignment 6
 ### Create Polymorphic Shellcode
+{% include preamble.md %}
 
 This is my post for Assignment 6
 
