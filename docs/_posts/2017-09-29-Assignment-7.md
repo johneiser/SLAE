@@ -6,7 +6,10 @@ order: 7
 
 [&lt;&lt; Go Back]({{ site.baseurl }})
 
-{% include post_header.md %}
+# {{ page.title }}
+### {{ page.description }}
+###### {{ page.date }}
+
 {% include preamble.md %}
 
 This is my post for Assignment 7
