@@ -7,7 +7,7 @@ order: 1
 [&lt;&lt; Go Back]({{ site.baseurl }})
 
 # Assignment 1
-### {{ description }}
+### Create a Shell_Bind_TCP shellcode
 {% include preamble.md %}
 
 This is my post for Assignment 1
