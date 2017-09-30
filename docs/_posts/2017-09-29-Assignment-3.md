@@ -1,13 +1,13 @@
 ---
 title:  Assignment 3
-description: assignment 3 description
+description: Create an Egghunter
 order: 3
 ---
 
 [&lt;&lt; Go Back]({{ site.baseurl }})
 
 # Assignment 3
-### description
+### Create an Egghunter
 
 This is my post for Assignment 3
 
