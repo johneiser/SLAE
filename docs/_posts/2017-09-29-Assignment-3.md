@@ -1,14 +1,14 @@
 ---
-title:  Challenge 3
-description: challenge 3 description
+title:  Assignment 3
+description: assignment 3 description
 order: 3
 ---
 
 [&lt;&lt; Go Back]({{ site.baseurl }})
 
-# Challenge 3
+# Assignment 3
 ### description
 
-This is my post for Challenge 3
+This is my post for Assignment 3
 
 [&lt;&lt; Go Back]({{ site.baseurl }})
