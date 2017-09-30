@@ -8,6 +8,7 @@ order: 3
 
 # Assignment 3
 ### Create an Egghunter
+{% include preamble.md %}
 
 This is my post for Assignment 3
 
