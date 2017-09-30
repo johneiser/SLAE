@@ -6,12 +6,17 @@ order: 4
 
 [&lt;&lt; Go Back]({{ site.baseurl }})
 
+
 # {{ page.title }}
 ### {{ page.description }}
+___
 ###### {{ page.date }}
+
 
 {% include preamble.md %}
 
+
 This is my post for Assignment 4
+
 
 [&lt;&lt; Go Back]({{ site.baseurl }})
