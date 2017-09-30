@@ -6,8 +6,7 @@ order: 6
 
 [&lt;&lt; Go Back]({{ site.baseurl }})
 
-# Assignment 6
-### Create Polymorphic Shellcode
+{% include post_header.md %}
 {% include preamble.md %}
 
 This is my post for Assignment 6
