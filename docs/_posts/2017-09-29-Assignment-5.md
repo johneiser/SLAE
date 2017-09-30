@@ -8,6 +8,7 @@ order: 5
 
 # Assignment 5
 ### Dissect Sample Shellcode
+{% include preamble.md %}
 
 This is my post for Assignment 5
 
