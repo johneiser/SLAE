@@ -1,5 +1,6 @@
 ---
 title: SLAE Challenge
+layout: default
 ---
 
 <ul>
