@@ -6,8 +6,7 @@ order: 3
 
 [&lt;&lt; Go Back]({{ site.baseurl }})
 
-# Assignment 3
-### Create an Egghunter
+{% include post_header.md %}
 {% include preamble.md %}
 
 This is my post for Assignment 3
