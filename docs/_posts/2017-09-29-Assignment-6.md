@@ -1,13 +1,13 @@
 ---
 title:  Assignment 6
-description: assignment 6 description
+description: Create Polymorphic Shellcode
 order: 6
 ---
 
 [&lt;&lt; Go Back]({{ site.baseurl }})
 
 # Assignment 6
-### description
+### Create Polymorphic Shellcode
 
 This is my post for Assignment 6
 
