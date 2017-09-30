@@ -3,12 +3,10 @@ title: SLAE Challenge
 layout: default
 ---
 
-<ul>
-  {% for post in site.posts %}
-    <li>
-      <a href="{{ post.url }}">{{ post.title }}</a>
-    </li>
-  {% endfor %}
-</ul>
+### Index
+
+{% for post in site.posts %}
+- [{{ post.baseurl }}]({{ post.title }})
+{% endfor %}
 
 text
