@@ -12,24 +12,24 @@ unsigned char code[] = \"$1\";
 int main(void) {
 	int (*ret)() = (int(*)())code;
 	ret();
-}" > test_shellcode.c
+}" > /tmp/test_shellcode.c
 
-gcc -fno-stack-protector -z execstack -o test_shellcode test_shellcode.c
+gcc -fno-stack-protector -z execstack -o /tmp/test_shellcode /tmp/test_shellcode.c
 
 if [ $? -eq 0 ]
 then
-	./test_shellcode
+	/tmp/test_shellcode
 else
 	echo "[!] Compilation failed."
 fi
 
-if [ -f "test_shellcode" ]
+if [ -f "/tmp/test_shellcode" ]
 then
-	rm test_shellcode
+	rm /tmp/test_shellcode
 fi
 
-if [ -f "test_shellcode.c" ]
+if [ -f "/tmp/test_shellcode.c" ]
 then
-	rm test_shellcode.c
+	rm /tmp/test_shellcode.c
 fi
 
