@@ -9,5 +9,5 @@ str = sys.argv[1]
 str_rev = str[::-1]
 hex = str_rev.encode("hex")
 
-for i in range(0, len(str), 4):
-	print "push 0x%s" % (hex[i*2:i*2+8])
+for i in range(0, len(str), 8):
+	print "push 0x%s" % (hex[i:i+8])
