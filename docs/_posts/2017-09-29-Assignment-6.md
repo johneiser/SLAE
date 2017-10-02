@@ -1,6 +1,6 @@
 ---
 title:  Assignment 6
-description: Create Polymorphic Shellcode
+description: Create Polymorphic Versions of Sample Shellcode
 order: 6
 ---
 
