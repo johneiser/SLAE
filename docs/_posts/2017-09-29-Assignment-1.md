@@ -10,7 +10,7 @@ order: 1
 # {{ page.title }}
 ### {{ page.description }}
 ___
-###### {{ page.date }}
+<div style="text-align:right;direction:ltr;margin-left:1em;">###### {{ page.date }}</div>
 
 
 
