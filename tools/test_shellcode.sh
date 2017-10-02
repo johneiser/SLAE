@@ -10,6 +10,7 @@ echo "#include <stdio.h>
 #include <string.h>
 unsigned char code[] = \"$1\";
 int main(void) {
+	printf(\"Shellcode Length: %d\\\n\", strlen(code));
 	int (*ret)() = (int(*)())code;
 	ret();
 }" > /tmp/test_shellcode.c
