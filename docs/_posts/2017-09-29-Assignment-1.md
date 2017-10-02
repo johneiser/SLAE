@@ -10,14 +10,13 @@ order: 1
 # {{ page.title }}
 ### {{ page.description }}
 ___
-<div style="text-align:right;direction:ltr;margin-left:1em;">###### {{ page.date }}</div>
-
-
-
-{% include preamble.md %}
-
+<div style="text-align:right;direction:ltr;margin-left:1em;"><h6>{{ page.date }}</h6></div>
 
 This is my post for Assignment 1
+
+
+<br>
+{% include preamble.md %}
 
 
 [&lt;&lt; Go Back]({{ site.baseurl }})
