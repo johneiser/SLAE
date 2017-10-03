@@ -46,7 +46,7 @@ int main() {
 
 	// Accept a connection
 
-	connfd = accept(sockfd, 0x0, 0x0);
+	connfd = accept(sockfd, 0, 0);
 
 	// Route i/o through connection
 
@@ -56,13 +56,42 @@ int main() {
 
 	// Execute /bin/sh
 
-	execve("/bin/sh", 0x0, 0x0);
+	execve("/bin/sh", 0, 0);
 
 	return 0;
 }
 
 ```
 
+Since the first step is creating a socket, let's look at the syscall *socketcall*.
+```c
+int socketcall(int call, unsigned long *args);
+```
+The syscall *socketcall* seems to accept a *call* parameter, so we'll take a look at those too.
+```bash
+> grep SYS_ /usr/include/linux/net.h
+
+#define SYS_SOCKET	1		/* sys_socket(2)		*/
+#define SYS_BIND	2		/* sys_bind(2)			*/
+#define SYS_CONNECT	3		/* sys_connect(2)		*/
+#define SYS_LISTEN	4		/* sys_listen(2)		*/
+#define SYS_ACCEPT	5		/* sys_accept(2)		*/
+#define SYS_GETSOCKNAME	6		/* sys_getsockname(2)		*/
+#define SYS_GETPEERNAME	7		/* sys_getpeername(2)		*/
+#define SYS_SOCKETPAIR	8		/* sys_socketpair(2)		*/
+#define SYS_SEND	9		/* sys_send(2)			*/
+#define SYS_RECV	10		/* sys_recv(2)			*/
+#define SYS_SENDTO	11		/* sys_sendto(2)		*/
+#define SYS_RECVFROM	12		/* sys_recvfrom(2)		*/
+#define SYS_SHUTDOWN	13		/* sys_shutdown(2)		*/
+#define SYS_SETSOCKOPT	14		/* sys_setsockopt(2)		*/
+#define SYS_GETSOCKOPT	15		/* sys_getsockopt(2)		*/
+#define SYS_SENDMSG	16		/* sys_sendmsg(2)		*/
+#define SYS_RECVMSG	17		/* sys_recvmsg(2)		*/
+#define SYS_ACCEPT4	18		/* sys_accept4(2)		*/
+#define SYS_RECVMMSG	19		/* sys_recvmmsg(2)		*/
+#define SYS_SENDMMSG	20		/* sys_sendmmsg(2)		*/
+```
 
 
 <br>
