@@ -37,7 +37,6 @@ int main() {
 	sockaddr.sin_family = AF_INET;
 	sockaddr.sin_port = htons(port);
 	sockaddr.sin_addr.s_addr = INADDR_ANY;
-
 	bind(sockfd, (struct sockaddr *) &sockaddr, sizeof(sockaddr));
 
 	// Listen on socket
