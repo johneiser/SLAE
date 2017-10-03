@@ -95,6 +95,7 @@ global _start
 section .text
 _start:
         ; int socketcall(int call, unsigned long *args)
+        ; int socket(int domain, int type, int protocol)
         ; eax = 0x66 (socketcall)
         ; ebx = 0x01 (socket)
         ; ecx = esp
@@ -111,12 +112,44 @@ _start:
         mov bl, cl
         inc ecx
         push ecx
+	
+	mov esi, eax    ; save sockfd
+        add esp, 0x10   ; clean stack
 
 ```
 
 Great!  Next up is bind.
 ```c
 int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+```
+
+Now, in assembly:
+```nasm
+	; int socketcall(int call, unsigned long *args)
+        ; int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen) 
+        ; struct sockaddr_in {short int sin_family, unsigned short int sin_port, struct in_addr sin_addr, 0}
+        ; eax = 0x66 (socketcall)
+        ; ebx = 0x02 (bind)
+        ; ecx = esp      
+        ; esp => |----------|-[esp +24]-|0x00000018|0x0002|0x115C|0x00000000|0x00000000|
+        ;           sockfd       addr     addrlen  AF_INET  port  INADDR_ANY  
+
+        xor eax, eax
+        mov al, 0x66
+        xor ebx, ebx
+        mov bl, 0x2
+        xor ecx, ecx
+        push ecx
+        push word 0x5c11  
+        push word 0x2
+        mov edi, esp
+        push 0x18
+        push edi
+        push esi
+        mov ecx, esp
+        int 0x80
+
+        add esp, 0x38   ; clean stack
 ```
 
 <br>
