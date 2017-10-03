@@ -1,6 +1,6 @@
 ---
 title:  Assignment 1
-description: Create a Shell_Bind_TCP shellcode
+description: Create a Shell Bind TCP shellcode
 order: 1
 ---
 
@@ -12,7 +12,19 @@ order: 1
 ___
 <div style="text-align:right;direction:ltr;margin-left:1em;"><h6>{{ page.date }}</h6></div>
 
-This is my post for Assignment 1
+Before we dive into shellcode, we'll first write a simple program in c to model the functionality.
+
+```c
+#include <sys/socket.h>
+
+
+int main() {
+
+
+
+  return 0;
+}
+```
 
 
 <br>
