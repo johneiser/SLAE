@@ -92,7 +92,19 @@ The syscall *socketcall* seems to accept a *call* parameter, so we'll take a loo
 #define SYS_RECVMMSG	19		/* sys_recvmmsg(2)		*/
 #define SYS_SENDMMSG	20		/* sys_sendmmsg(2)		*/
 ```
+To create a socket we'll need SYS_SOCKET, 1.  Now we can start some assembly.
 
+```nasm
+; bind_shell_tcp.nasm
+; - Bind to a socket, listen for a connection, provide shell.
+
+global _start
+
+section .data
+_start:
+
+
+```
 
 <br>
 {% include preamble.md %}
