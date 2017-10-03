@@ -63,7 +63,7 @@ int main() {
 
 ```
 
-Since the first step is creating a socket, let's look at the syscall *socketcall*.
+Since the first step is creating a socket, let's look at the syscall *socketcall*, **102**.
 ```c
 int socketcall(int call, unsigned long *args);
 ```
@@ -76,33 +76,39 @@ The syscall *socketcall* seems to accept a *call* parameter, so we'll take a loo
 #define SYS_CONNECT	3		/* sys_connect(2)		*/
 #define SYS_LISTEN	4		/* sys_listen(2)		*/
 #define SYS_ACCEPT	5		/* sys_accept(2)		*/
-#define SYS_GETSOCKNAME	6		/* sys_getsockname(2)		*/
-#define SYS_GETPEERNAME	7		/* sys_getpeername(2)		*/
-#define SYS_SOCKETPAIR	8		/* sys_socketpair(2)		*/
-#define SYS_SEND	9		/* sys_send(2)			*/
-#define SYS_RECV	10		/* sys_recv(2)			*/
-#define SYS_SENDTO	11		/* sys_sendto(2)		*/
-#define SYS_RECVFROM	12		/* sys_recvfrom(2)		*/
-#define SYS_SHUTDOWN	13		/* sys_shutdown(2)		*/
-#define SYS_SETSOCKOPT	14		/* sys_setsockopt(2)		*/
-#define SYS_GETSOCKOPT	15		/* sys_getsockopt(2)		*/
-#define SYS_SENDMSG	16		/* sys_sendmsg(2)		*/
-#define SYS_RECVMSG	17		/* sys_recvmsg(2)		*/
-#define SYS_ACCEPT4	18		/* sys_accept4(2)		*/
-#define SYS_RECVMMSG	19		/* sys_recvmmsg(2)		*/
-#define SYS_SENDMMSG	20		/* sys_sendmmsg(2)		*/
+...
 ```
-To create a socket we'll need SYS_SOCKET, 1.  Now we can start some assembly.
+To create a socket we'll need SYS_SOCKET, **1**.  Now we can start some assembly.
 
 ```nasm
 ; bind_shell_tcp.nasm
-; - Bind to a socket, listen for a connection, provide shell.
+;  - Bind to a socket, listen for a connection, provide shell.
 
 global _start
 
-section .data
+section .text
 _start:
+        ; int socketcall(int call, unsigned long *args)
+        ; eax = 0x66 (socketcall)
+        ; ebx = 0x01 (socket)
+        ; ecx = esp
+        ; esp => |0x00000002|0x00000001|0x00000000|
+        ;          AF_INET  SOCK_STREAM    null
 
+        xor eax, eax
+        mov al, 0x66
+
+        xor ecx, ecx
+        push ecx
+
+        inc ecx
+        push ecx
+
+        xor ebx, ebx
+        mov bl, cl
+
+        inc ecx
+        push ecx
 
 ```
 
