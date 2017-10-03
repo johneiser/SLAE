@@ -78,7 +78,13 @@ The syscall *socketcall* seems to accept a *call* parameter, so we'll take a loo
 #define SYS_ACCEPT	5		/* sys_accept(2)		*/
 ...
 ```
-To create a socket we'll need SYS_SOCKET, **1**.  Now we can start some assembly.
+
+To create a socket we'll need SYS_SOCKET, **1**, which from our c model we know takes the following form:
+```c
+int socket(int domain, int type, int protocol);
+```
+
+Let's try to put all this down in assembly.
 
 ```nasm
 ; bind_shell_tcp.nasm
@@ -97,20 +103,18 @@ _start:
 
         xor eax, eax
         mov al, 0x66
-
         xor ecx, ecx
         push ecx
-
         inc ecx
         push ecx
-
         xor ebx, ebx
         mov bl, cl
-
         inc ecx
         push ecx
 
 ```
+
+Great!  Next up is bind.
 
 <br>
 {% include preamble.md %}
