@@ -12,7 +12,7 @@ order: 1
 ___
 <div style="text-align:right;direction:ltr;margin-left:1em;"><h6>{{ page.date }}</h6></div>
 
-Before we dive into shellcode, we'll first write a simple program in c to model the functionality.
+Before we dive into assembly, let's first write a simple program in c to model the functionality.
 
 ```c
 /* bind_tcp_model.c
@@ -115,6 +115,9 @@ _start:
 ```
 
 Great!  Next up is bind.
+```c
+int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+```
 
 <br>
 {% include preamble.md %}
