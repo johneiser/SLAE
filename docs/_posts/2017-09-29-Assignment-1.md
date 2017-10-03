@@ -118,12 +118,8 @@ _start:
 
 ```
 
-Great!  Next up is bind.
-```c
-int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
-```
+Great!  Now let's try the same process for *bind*.
 
-Now, in assembly:
 ```nasm
 	; int socketcall(int call, unsigned long *args)
         ; int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen) 
