@@ -9,7 +9,7 @@
 
 int main() {
 	int port = 4444;
-	const char *host = "127.0.0.1";
+	const char *host = "0.0.0.0";
 	int sockfd;
 	struct sockaddr_in sockaddr;
 
