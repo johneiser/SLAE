@@ -1,4 +1,4 @@
-; bind_shell.nasm
+; bind_shell_vanilla.nasm
 ;  - Bind to a socket, listen for a connection, provide shell.
 
 global _start
