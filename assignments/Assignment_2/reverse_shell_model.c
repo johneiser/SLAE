@@ -1,5 +1,5 @@
-/* reverse_tcp_model.c
- *  - connect to a host, provide shell.
+/* reverse_shell_model.c
+ *  - Connect to a host, provide shell.
  */
 
 #include <sys/socket.h>	// socket, AF_INET, SOCK_STREAM
