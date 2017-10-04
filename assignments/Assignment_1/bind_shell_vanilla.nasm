@@ -29,7 +29,7 @@ _start:
         ; eax = 0x66 (socketcall)
         ; ebx = 0x2 (bind)
         ; ecx = esp
-        ; esp => |----------|----------|0x00000018|0x0002|0x115C|0x00000000|0x00000000|
+        ; esp => |----------|----------|0x00000018|0x0002|0x115C|0x00000000|
         ;           sockfd      addr      addrlen  AF_INET  port  INADDR_ANY
 
 	push 0x0		; INADDR_ANY
