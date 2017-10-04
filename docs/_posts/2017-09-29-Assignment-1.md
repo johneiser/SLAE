@@ -62,11 +62,20 @@ int main() {
 
 ```
 
-Since the first step is creating a socket, let's look at the syscall *socketcall*, **102**.
+It seems we have 6 syscalls to handle:
+- socket
+- bind
+- listen
+- accept
+- dup2
+- execve
+
+The process for finding the functionality of a syscall generally starts with checking its man page, but interestingly, most of the syscalls related to sockets use the same syscall, passing their *call* parameter to **socketcall**:
 ```c
 int socketcall(int call, unsigned long *args);
 ```
-The syscall *socketcall* seems to accept a *call* parameter, so we'll take a look at those too.
+
+We can then find the appropriate *call* parameter for each of our syscalls:
 ```bash
 > grep SYS_ /usr/include/linux/net.h
 
@@ -78,7 +87,7 @@ The syscall *socketcall* seems to accept a *call* parameter, so we'll take a loo
 ...
 ```
 
-To create a socket we'll need SYS_SOCKET, **1**, which from our c model we know takes the following form:
+For our first syscall, creating a socket, we'll need to use SYS_SOCKET, **1**, which we know from our c model takes the following form:
 ```c
 int socket(int domain, int type, int protocol);
 ```
@@ -86,66 +95,26 @@ int socket(int domain, int type, int protocol);
 Let's try to put all this down in assembly.
 
 ```nasm
-; bind_shell_tcp.nasm
-;  - Bind to a socket, listen for a connection, provide shell.
-
-global _start
-
-section .text
-_start:
         ; int socketcall(int call, unsigned long *args)
         ; int socket(int domain, int type, int protocol)
         ; eax = 0x66 (socketcall)
-        ; ebx = 0x01 (socket)
+        ; ebx = 0x1 (socket)
         ; ecx = esp
         ; esp => |0x00000002|0x00000001|0x00000000|
         ;          AF_INET  SOCK_STREAM    null
 
-        xor eax, eax
-        mov al, 0x66
-        xor ecx, ecx
-        push ecx
-        inc ecx
-        push ecx
-        xor ebx, ebx
-        mov bl, cl
-        inc ecx
-        push ecx
-	
-	mov esi, eax    ; save sockfd
-        add esp, 0x10   ; clean stack
-
+        push 0x0                ; IPPROTO_IP
+        push 0x1                ; SOCK_STREAM
+        push 0x2                ; AF_INET
+        mov eax, 0x66           ; socketcall, 102
+        mov ebx, 0x1            ; socket, 1
+        mov ecx, esp            ; args
+        int 0x80                ; execute
+        mov esi, eax            ; save sockfd
 ```
 
-Great!  Now let's try the same process for *bind*.
+As you can see, we filled the stack with the arguments to **socket** and pointed *ecx* to them.  We then filled *eax* with the **socketcall** identifier and *ebx* with the **socket** identifier, finally calling the syscall to execute.  Note we also saved the return value in esi, for future use. 
 
-```nasm
-	; int socketcall(int call, unsigned long *args)
-        ; int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen) 
-        ; struct sockaddr_in {short int sin_family, unsigned short int sin_port, struct in_addr sin_addr, 0}
-        ; eax = 0x66 (socketcall)
-        ; ebx = 0x02 (bind)
-        ; ecx = esp      
-        ; esp => |----------|-[esp +24]-|0x00000018|0x0002|0x115C|0x00000000|0x00000000|
-        ;           sockfd       addr     addrlen  AF_INET  port  INADDR_ANY  
-
-        xor eax, eax
-        mov al, 0x66
-        xor ebx, ebx
-        mov bl, 0x2
-        xor ecx, ecx
-        push ecx
-        push word 0x5c11  
-        push word 0x2
-        mov edi, esp
-        push 0x18
-        push edi
-        push esi
-        mov ecx, esp
-        int 0x80
-
-        add esp, 0x38   ; clean stack
-```
 
 <br>
 {% include preamble.md %}
