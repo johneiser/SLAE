@@ -92,7 +92,7 @@ For our first syscall, creating a socket, we'll need to use SYS_SOCKET, **1**, w
 int socket(int domain, int type, int protocol);
 ```
 
-Let's try to put all this down in assembly.
+Let's try to put all this down in assembly:
 
 ```nasm
         ; int socketcall(int call, unsigned long *args)
