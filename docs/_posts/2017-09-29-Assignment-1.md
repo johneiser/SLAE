@@ -253,7 +253,20 @@ _start:
 	int 0x80
 ```
 
-Compiling this and running it would succeed in producing a bind shell - however, an astute observer may have noticed that there are quite a few *nulls* in this shellcode, which could cause it to break in the context of an exploit.  It is also excessively long, incorporating little compression tactics as each syscall is modular and virtually independent.
+Compiling this and running it would succeed in producing a bind shell - however, an astute observer may have noticed that there are quite a few *nulls* in this shellcode, which could cause it to break in the context of an exploit.  It is also excessively long, incorporating little compression tactics as each syscall is modular and virtually independent.  Making a few adjustments to eliminate the nulls, our new shellcode might look something like this:
+
+```nasm
+TODO
+```
+
+Great! Working, null-free shellcode.  However, this wouldn't be very useful if we had to rewrite it any time we wanted to change the port, so let's create a *generator* which will swap out the *port* parameter automatically.
+
+```python
+TODO
+```
+
+And there you have it - a bind tcp shellcode and its very own generator.
+
 
 <br>
 {% include preamble.md %}
