@@ -118,7 +118,7 @@ As you can see, we filled the stack with the arguments to **socket** and pointed
 The rest of the calls follow a similar pattern, as shown in the full assembly file below:
 
 ```nasm
-; bind_shell.nasm
+; bind_shell_vanilla.nasm
 ;  - Bind to a socket, listen for a connection, provide shell.
 
 global _start
