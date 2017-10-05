@@ -1,7 +1,7 @@
 ; read_file.nasm
-;  - Analyzed shellcode from metasploit, produced by
+;  - Analyzed shellcode from metasploit
 ;
-; > msfvenom -a x86 --platform linux -p linux/x86/read_file FILE=/tmp/file.txt -f c
+; > msfvenom -a x86 --platform linux -p linux/x86/read_file PATH=/tmp/file.txt -f c
 
 global _start
 
