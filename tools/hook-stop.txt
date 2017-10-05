@@ -1,10 +1,11 @@
 define hook-stop
 x/10i $eip
-print /x $eax
-print /x $ebx
-print /x $ecx
-print /x $edx
-print /x $esi
-print /x $edi
+i r $eflags
+i r $eax
+i r $ebx
+i r $ecx
+i r $edx
+i r $esi
+i r $edi
 x/12xw $esp
 end
