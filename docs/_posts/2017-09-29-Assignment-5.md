@@ -94,7 +94,7 @@ section_1:
 section_2:
         call section_1
 
-section 3:
+section_3:
         das                             ; /
         jz 0xad                         ; tm
         jo 0x71                         ; p/
