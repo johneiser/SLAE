@@ -14,7 +14,7 @@ ___
 
 As we did with the bind shell, let's start with a c model:
 ```c
-/* reverse_tcp_model.c
+/* reverse_shell_model.c
  *  - connect to a host, provide shell.
  */
 
