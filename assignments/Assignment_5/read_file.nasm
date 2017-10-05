@@ -61,8 +61,8 @@ section_2:
         call section_1
 
 section 3:
-        das
-        jz 0xad
-        jo 0x71
-        imul bp,[ebp+0x2e],word 0x7874
-        jz 0x4b
+        das				; /
+        jz 0xad				; tm
+        jo 0x71				; p/
+        imul bp,[ebp+0x2e],word 0x7874	; file.tx
+        jz 0x4b				; t\0
