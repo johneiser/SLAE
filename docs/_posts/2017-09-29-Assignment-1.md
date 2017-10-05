@@ -15,7 +15,7 @@ ___
 Before we dive into assembly, let's first write a simple program in c to model the functionality:
 
 ```c
-/* bind_tcp_model.c
+/* bind_shell_model.c
  *  - Bind to a socket, listen for a connection, provide shell.
  */
 
