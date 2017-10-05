@@ -48,7 +48,7 @@ section_1:
 
         ; int open(const char *pathname, int flags)
         ; eax = 0x5 (open)
-        ; ebx = pathname
+        ; ebx = /tmp/file.txt
         ; ecx = 0x0
 
         mov eax,0x5
