@@ -40,8 +40,9 @@ section_1:
 	; ssize_t write(int fd, const void *buf, size_t count)
 	; eax = 0x4 (write)
 	; ebx = 0x1 (stdout)
-	; ecx = ?
-	; edx = ?
+        ; ecx = esp
+        ; edx = 0x1000
+        ; esp => |--data-from-file--|
 
         mov edx,eax
         mov eax,0x4
