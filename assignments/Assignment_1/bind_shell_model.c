@@ -1,4 +1,4 @@
-/* bind_tcp_model.c
+/* bind_shell_model.c
  *  - Bind to a socket, listen for a connection, provide shell.
  */
 
