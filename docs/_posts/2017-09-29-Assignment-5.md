@@ -99,8 +99,8 @@ section_3:
         das                             ; /
         jz 0xad                         ; tm
         jo 0x71                         ; p/
-        imul bp,[ebp+0x2e],word 0x7874  ; file.txt
-
+        imul bp,[ebp+0x2e],word 0x7874  ; file.tx
+        jz 0x4b				; t\0
 ```
 
 A few things about this shellcode pop out at us.  First, it's using the jmp-call-pop method of storing a nearby address, which happens to point to *section 3*, or "/tmp/file.txt".  Then, the shellcode makes 4 syscalls:
