@@ -293,7 +293,7 @@ section_2:
         int 0x80
 ```
 
-The shellcode starts by calling the **setreuid** syscall, which is necessary for maintaining the permissions required to edit the "/etc/shadow" file.  This shellcode actually combines two common ways to reference a string in shellcode: the *call-pop* method (that we've seen already) and the *stack-push* method.  When calling the **open** syscall, the string "/etc//passwd" is pushed to the stack and referenced in the syscall.  Then we see a *call-pop* routine to save the string "metasploit:Az/dIsj4p4IRc:0:0::/:/bin/sh\n" for use in the **write** syscall.  After writing, the shellcode the exits cleanly.
+The shellcode starts by calling the **setreuid** syscall, which is necessary for maintaining the permissions required to edit the "/etc/passwd" file.  This shellcode actually combines two common ways to reference a string in shellcode: the *call-pop* method (that we've seen already) and the *stack-push* method.  When calling the **open** syscall, the string "/etc//passwd" is pushed to the stack and referenced in the syscall.  Then we see a *call-pop* routine to save the string "metasploit:Az/dIsj4p4IRc:0:0::/:/bin/sh\n" for use in the **write** syscall.  After writing, the shellcode the exits cleanly.
 
 A little insight into the effort put in to shrinking shellcode is that, for this last adduser shellcode in the **write** syscall, they chose a `mov edx,[ecx-0x4]` (\x8b\x51\xfc) to put 40 into edx, instead of `xor edx,edx;mov dl,0x4` (\x31\xd2\xb2\x04).  That's quite a change for one byte - worth it.
 
