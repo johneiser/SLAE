@@ -99,7 +99,7 @@ section_3:
         das                             ; /
         jz 0xad                         ; tm
         jo 0x71                         ; p/
-        imul bp,[ebp+0x2e],word 0x7874  ; file.tx
+        imul bp,[ebp+0x2e],word 0x7874  ; file.txt
 
 ```
 
