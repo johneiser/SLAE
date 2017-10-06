@@ -73,7 +73,7 @@ section_2:
 	; edx = 0x28 (40)
 
 	pop ecx			; save pointer to section_1
-	mov edx,[ecx-0x4]	; clever way set edx to 40
+	mov edx,[ecx-0x4]	; interesting way set edx to 40
 	push byte +0x4
 	pop eax
 	int 0x80
