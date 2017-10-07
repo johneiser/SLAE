@@ -69,7 +69,7 @@ EIP
                  EIP
 ```
 
-Great!  The next step is to build an the actual encoder, shown below:
+Great!  The next step is to build the actual encoder, shown below:
 
 ```python
 #!/usr/bin/python
