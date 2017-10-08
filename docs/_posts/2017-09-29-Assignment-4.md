@@ -139,6 +139,8 @@ As you can see, our encoder not only encodes the provided *shellcode* with the p
 
 A note on this encoder worth mentioning is that it **expands**, making use of the space after it.  This may or may not be a concern, depending on the application, but an improvement to this encoder might be eliminating the need to expand and just rearrange in-place.
 
+You can find the all the code to this challenge at [https://github.com/johneiser/SLAE/tree/master/assignments/Assignment_4](https://github.com/johneiser/SLAE/tree/master/assignments/Assignment_4).
+
 <br>
 {% include preamble.md %}
 
