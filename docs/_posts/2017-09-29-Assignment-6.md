@@ -15,6 +15,8 @@ ___
 This is my post for Assignment 6
 
 
+You can find the all the code to this challenge at [https://github.com/johneiser/SLAE/tree/master/assignments/Assignment_6](https://github.com/johneiser/SLAE/tree/master/assignments/Assignment_6).
+
 <br>
 {% include preamble.md %}
 
