@@ -68,21 +68,6 @@ int chunk(const unsigned char *src, unsigned char **dest, const int len) {
   *tmp++ = '\0';
   return 0;
 }
-
-int finalize(unsigned char *src, unsigned char **dest, const int len) {
-  int i = 0, j = 0, srclen = strlen(src);
-  char *tmp = *dest;
-  for (i = 0; i < srclen; i++) {
-    *tmp++ = '\\';
-    *tmp++ = 'x';
-    for (j = 0; j < len; j++) {
-      *tmp++ = src[i++];
-    }
-    i--;
-  }
-  *tmp++ = '\0';
-  return 0;
-}
 ```
 
 The implementation of the parser is quite simple, shown below:
@@ -153,6 +138,22 @@ By parsing out "\x" from our shellcode, I can properly ingest the shellcode for 
 As you can see, I used **strtok** to iterate through the chunked character strings, then converted every 8 characters into a 4 byte unsigned long using **strtoul**, 2 of which are needed for each iteration of TEA.  Once every chunk has been encrypted, a string of bytes can now be formatted for output.
 
 ```c
+int finalize(unsigned char *src, unsigned char **dest, const int len) {
+  int i = 0, j = 0, srclen = strlen(src);
+  char *tmp = *dest;
+  for (i = 0; i < srclen; i++) {
+    *tmp++ = '\\';
+    *tmp++ = 'x';
+    for (j = 0; j < len; j++) {
+      *tmp++ = src[i++];
+    }
+    i--;
+  }
+  *tmp++ = '\0';
+  return 0;
+}
+
+int main(int argc, char **argv) {
   ...
   finalLength = afterLength * 2;
   final = malloc(sizeof(unsigned char)*finalLength + 1);
@@ -181,7 +182,7 @@ int finalize(unsigned char *src, unsigned char **dest, const int len) {
   return 0;
 }
 
-int main() {
+int main(int argc, char **argv) {
   ...
   finalLength = afterLength / 2;
   final = malloc(sizeof(unsigned char)*finalLength + 1);
