@@ -297,6 +297,8 @@ The shellcode starts by calling the **setreuid** syscall, which is necessary for
 
 A little insight into the effort put in to shrinking shellcode - in the **write** syscall they chose to use `mov edx,[ecx-0x4]` (\x8b\x51\xfc) to put 40 into edx instead of `xor edx,edx;mov dl,0x4` (\x31\xd2\xb2\x04).  That's quite a change for one byte - worth it.
 
+You can find the all the code to this challenge at [https://github.com/johneiser/SLAE/tree/master/assignments/Assignment_5](https://github.com/johneiser/SLAE/tree/master/assignments/Assignment_5).
+
 <br>
 {% include preamble.md %}
 
