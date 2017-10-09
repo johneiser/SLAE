@@ -184,8 +184,8 @@ As you can see, we've obfuscated the placement of "/etc//shadow" on the stack by
 Finally, we'll take a look at shellcode that [reads /etc/passwd and sends it](http://shell-storm.org/shellcode/files/shellcode-861.php) to a tcp server of your choice, reproduced below:
 
 ```nasm
-; chmod_etc_shadow.nasm
-;  - Execute chmod 0666 /etc/shadow and exit
+; passwd_read_send.nasm
+;  - Read /etc/passwd and send it over tcp
 ;
 ; [LINK] http://shell-storm.org/shellcode/files/shellcode-861.php
 
